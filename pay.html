@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment • RankGo Taxi</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="pay">
+    <div class="container">
+        <nav class="navbar">
+            <div class="nav-left">
+                <img src="assets/logo.svg" alt="logo">
+                <div class="brand">RankGo<b>Taxi</b></div>
+            </div>
+            <div class="nav-right">
+                <a href="passenger.html">Back to Bookings</a>
+            </div>
+        </nav>
+        
+        <div class="payment-layout">
+            <div class="card">
+                <h1>Payment Details</h1>
+                
+                <div class="booking-info">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <th>Taxi</th>
+                                <td id="payTaxi">—</td>
+                            </tr>
+                            <tr>
+                                <th>Route</th>
+                                <td id="payRoute">—</td>
+                            </tr>
+                            <tr>
+                                <th>Pickup Type</th>
+                                <td id="payPickup">—</td>
+                            </tr>
+                            <tr>
+                                <th>Departure</th>
+                                <td id="payTime">—</td>
+                            </tr>
+                            <tr>
+                                <th>Seats</th>
+                                <td id="paySeats">—</td>
+                            </tr>
+                            <tr>
+                                <th>Price per Seat</th>
+                                <td id="payPrice">—</td>
+                            </tr>
+                            <tr class="total-row">
+                                <th>Total Amount</th>
+                                <td id="payTotal">—</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="email-confirm">
+                    <label>
+                        <input type="checkbox" id="sendEmailReceipt" checked>
+                        Send receipt to my email
+                    </label>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>Choose Payment Method</h2>
+                
+                <div class="payment-methods">
+                    <label class="payment-option">
+                        <input type="radio" name="paymentMethod" value="card" checked>
+                        <span class="payment-card">
+                            <span class="payment-icon">💳</span>
+                            <span class="payment-title">Credit/Debit Card</span>
+                        </span>
+                    </label>
+                    <label class="payment-option">
+                        <input type="radio" name="paymentMethod" value="eft">
+                        <span class="payment-card">
+                            <span class="payment-icon">🏦</span>
+                            <span class="payment-title">EFT Transfer</span>
+                        </span>
+                    </label>
+                    <label class="payment-option">
+                        <input type="radio" name="paymentMethod" value="wallet">
+                        <span class="payment-card">
+                            <span class="payment-icon">📱</span>
+                            <span class="payment-title">Mobile Wallet</span>
+                        </span>
+                    </label>
+                </div>
+                
+                <!-- Card Payment Form -->
+                <div id="cardForm" class="payment-form">
+                    <div class="form-group">
+                        <label>Card Number</label>
+                        <input type="text" class="input" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19">
+                    </div>
+                    <div class="grid">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>Expiry Date</label>
+                                <input type="text" class="input" id="cardExpiry" placeholder="MM/YY" maxlength="5">
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>CVV</label>
+                                <input type="text" class="input" id="cardCVV" placeholder="123" maxlength="4">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Cardholder Name</label>
+                        <input type="text" class="input" id="cardName" placeholder="John Doe">
+                    </div>
+                </div>
+                
+                <!-- EFT Form -->
+                <div id="eftForm" class="payment-form" style="display: none;">
+                    <div class="eft-details">
+                        <h3>Bank Details</h3>
+                        <p><strong>Bank:</strong> First National Bank</p>
+                        <p><strong>Account Name:</strong> RankGo Taxi Services</p>
+                        <p><strong>Account Number:</strong> 62845678901</p>
+                        <p><strong>Branch Code:</strong> 250655</p>
+                        <p><strong>Reference:</strong> <span id="eftRef"></span></p>
+                        <p class="warning">Please use your booking reference as payment reference</p>
+                    </div>
+                </div>
+                
+                <!-- Mobile Wallet Form -->
+                <div id="walletForm" class="payment-form" style="display: none;">
+                    <div class="form-group">
+                        <label>Mobile Number</label>
+                        <input type="tel" class="input" id="walletNumber" placeholder="0812345678">
+                    </div>
+                    <p class="small">You will receive a payment request on your mobile wallet app</p>
+                </div>
+                
+                <div class="payment-actions">
+                    <button class="btn secondary" onclick="window.location='passenger.html'">Cancel</button>
+                    <button class="btn" id="payNowBtn">Pay Now</button>
+                </div>
+                
+                <p class="hint" id="payHint"></p>
+                
+                <div class="secure-badge">
+                    🔒 Secure Payment Gateway - Your information is encrypted
+                </div>
+            </div>
+        </div>
+        
+        <!-- Receipt Card -->
+        <div class="card" id="receiptCard" style="display: none;">
+            <div class="receipt">
+                <div class="receipt-header">
+                    <h2>✅ Payment Successful!</h2>
+                    <p class="receipt-id">Transaction ID: <span id="transactionId"></span></p>
+                </div>
+                
+                <div class="receipt-body">
+                    <h3>Receipt</h3>
+                    <div id="receiptDetails"></div>
+                </div>
+                
+                <div class="email-sent" id="emailSentNotice" style="display:none">
+                    <p>📧 Confirmation email sent to <strong id="emailAddress"></strong></p>
+                </div>
+                
+                <div class="receipt-footer">
+                    <p>Your driver will be notified of your booking.</p>
+                    <button class="btn" onclick="window.location='passenger.html'">View My Bookings</button>
+                    <button class="btn secondary" id="downloadReceipt">Download Receipt</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Processing Overlay -->
+        <div class="processing-overlay" id="processingOverlay">
+            <div class="processing-content">
+                <div class="spinner"></div>
+                <h3>Processing Payment...</h3>
+                <p>Please do not close this window</p>
+            </div>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>

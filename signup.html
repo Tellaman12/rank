@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up • RankGo Taxi</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="signup">
+    <div class="container">
+        <nav class="navbar">
+            <div class="nav-left">
+                <img src="assets/logo.svg" alt="logo">
+                <div class="brand">RankGo<b>Taxi</b></div>
+            </div>
+        </nav>
+        
+        <div class="card login-card">
+            <h1>Create Account</h1>
+            <p class="subtitle">Join RankGo Taxi today</p>
+            
+            <form id="signupForm">
+                <input type="text" class="input" id="signupName" placeholder="Full name" required>
+                <input type="email" class="input" id="signupEmail" placeholder="Email address" required>
+                <input type="tel" class="input" id="signupPhone" placeholder="Phone number" required>
+                <input type="password" class="input" id="signupPassword" placeholder="Password (min 6 characters)" required minlength="6">
+                <input type="password" class="input" id="signupConfirm" placeholder="Confirm password" required>
+                
+                <div class="role-select">
+                    <label class="role-option">
+                        <input type="radio" name="role" value="passenger" checked>
+                        <span class="role-card">
+                            <span class="role-icon">🚶</span>
+                            <span class="role-title">Passenger</span>
+                            <span class="role-desc">Book rides</span>
+                        </span>
+                    </label>
+                    <label class="role-option">
+                        <input type="radio" name="role" value="driver">
+                        <span class="role-card">
+                            <span class="role-icon">🚕</span>
+                            <span class="role-title">Driver</span>
+                            <span class="role-desc">Offer rides</span>
+                        </span>
+                    </label>
+                </div>
+                
+                <div class="checkbox-group">
+                    <label>
+                        <input type="checkbox" id="emailNotifications" checked>
+                        Receive email notifications for bookings
+                    </label>
+                </div>
+                
+                <button type="submit" class="btn btn-full">Create Account</button>
+            </form>
+            
+            <p class="hint" id="signupHint"></p>
+            
+            <p class="signup-link">
+                Already have an account? <a href="index.html">Sign in</a>
+            </p>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>

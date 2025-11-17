@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Passenger • RankGo Taxi</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="passenger">
+    <div class="container">
+        <nav class="navbar">
+            <div class="nav-left">
+                <img src="assets/logo.svg" alt="logo">
+                <div class="brand">RankGo<b>Taxi</b></div>
+            </div>
+            <div class="nav-right">
+                <span class="notification-badge" id="notifBadge" style="display:none">0</span>
+                <button class="icon-btn" id="notifBtn" title="Notifications">🔔</button>
+                <button class="icon-btn" id="msgBtn" title="Messages">💬</button>
+                <span id="userBadge" class="badge"></span>
+                <a href="#" id="logoutBtn">Logout</a>
+            </div>
+        </nav>
+        
+        <!-- Real-time status banner -->
+        <div class="status-banner" id="statusBanner" style="display:none">
+            <div class="status-icon">🚕</div>
+            <div class="status-text" id="statusText"></div>
+            <button class="close-btn" onclick="this.parentElement.style.display='none'">&times;</button>
+        </div>
+        
+        <div class="card">
+            <h1>Find a Taxi</h1>
+            
+            <div class="search-box">
+                <div class="grid">
+                    <div class="col-4">
+                        <label>From</label>
+                        <div class="autocomplete-wrapper">
+                            <input type="text" class="input" id="searchOrigin" placeholder="Enter origin" autocomplete="off">
+                            <div class="suggestions" id="originSuggestions"></div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <label>To</label>
+                        <div class="autocomplete-wrapper">
+                            <input type="text" class="input" id="searchDest" placeholder="Enter destination" autocomplete="off">
+                            <div class="suggestions" id="destSuggestions"></div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <label>&nbsp;</label>
+                        <button class="btn btn-full" id="searchBtn">Search Routes</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="searchResults"></div>
+        </div>
+        
+        <div class="card">
+            <h2>My Active Rides</h2>
+            <div id="activeRides"></div>
+        </div>
+        
+        <div class="card">
+            <h2>My Bookings</h2>
+            <div id="myBookings"></div>
+        </div>
+    </div>
+    
+    <!-- Booking Modal -->
+    <div class="modal" id="bookingModal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeModal">&times;</span>
+            <h2>Book Your Seat</h2>
+            <div id="modalDetails"></div>
+            
+            <div class="form-group">
+                <label>Number of Seats</label>
+                <input type="number" class="input" id="seatCount" min="1" value="1">
+            </div>
+            
+            <div class="form-group">
+                <label>Pickup Location Type</label>
+                <div class="pickup-options">
+                    <label class="pickup-option">
+                        <input type="radio" name="pickupType" value="rank" checked>
+                        <span class="pickup-card">
+                            <span class="pickup-icon">🚏</span>
+                            <span>Taxi Rank</span>
+                        </span>
+                    </label>
+                    <label class="pickup-option">
+                        <input type="radio" name="pickupType" value="hiking">
+                        <span class="pickup-card">
+                            <span class="pickup-icon">👍</span>
+                            <span>Hiking Spot</span>
+                        </span>
+                    </label>
+                </div>
+            </div>
+            
+            <div class="form-group" id="hikingDetails" style="display:none">
+                <label>Pickup Address/Landmark</label>
+                <input type="text" class="input" id="pickupAddress" placeholder="Enter specific pickup location">
+            </div>
+            
+            <div class="booking-summary">
+                <p>Total: R<span id="bookingTotal">0</span></p>
+            </div>
+            <button class="btn btn-full" id="confirmBooking">Request Ride</button>
+            <p class="small" style="margin-top:10px; text-align:center;">Driver will confirm your request</p>
+        </div>
+    </div>
+    
+    <!-- Messages Modal -->
+    <div class="modal" id="messagesModal">
+        <div class="modal-content modal-large">
+            <span class="close-modal" id="closeMsgModal">&times;</span>
+            <h2>Messages</h2>
+            <div class="chat-list" id="chatList"></div>
+        </div>
+    </div>
+    
+    <!-- Chat Modal -->
+    <div class="modal" id="chatModal">
+        <div class="modal-content modal-large">
+            <div class="chat-header">
+                <button class="back-btn" id="backToChats">←</button>
+                <h3 id="chatWith"></h3>
+                <span class="close-modal" id="closeChatModal">&times;</span>
+            </div>
+            <div class="chat-messages" id="chatMessages"></div>
+            <div class="chat-input">
+                <input type="text" class="input" id="messageInput" placeholder="Type a message...">
+                <button class="btn" id="sendMessage">Send</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Notifications Panel -->
+    <div class="notifications-panel" id="notifPanel" style="display:none">
+        <div class="notif-header">
+            <h3>Notifications</h3>
+            <button class="clear-btn" id="clearNotifs">Clear All</button>
+        </div>
+        <div class="notif-list" id="notifList"></div>
+    </div>
+    
+    <!-- Cancel Confirmation Modal -->
+    <div class="modal" id="cancelModal">
+        <div class="modal-content">
+            <h2>Cancel Booking</h2>
+            <p>Are you sure you want to cancel this booking?</p>
+            <div class="cancel-fee-info">
+                <p><strong>Cancellation Fee:</strong> R<span id="cancelFee">0</span></p>
+                <p class="small">A 10% cancellation fee applies to all bookings</p>
+            </div>
+            <div class="modal-actions">
+                <button class="btn secondary" id="cancelNo">No, Keep Booking</button>
+                <button class="btn danger" id="cancelYes">Yes, Cancel & Pay Fee</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="app.js"></script>
+</body>
+</html>

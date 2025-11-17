@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login • RankGo Taxi</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="login">
+    <div class="container">
+        <nav class="navbar">
+            <div class="nav-left">
+                <img src="assets/logo.svg" alt="logo">
+                <div class="brand">RankGo<b>Taxi</b></div>
+            </div>
+        </nav>
+        
+        <div class="card login-card">
+            <h1>Welcome Back</h1>
+            <p class="subtitle">Sign in to your account</p>
+            
+            <form id="loginForm">
+                <input type="email" class="input" id="loginEmail" placeholder="Email address" required>
+                <input type="password" class="input" id="loginPassword" placeholder="Password" required>
+                <button type="submit" class="btn btn-full">Sign In</button>
+            </form>
+            
+            <p class="hint" id="loginHint"></p>
+            
+            <div class="divider">
+                <span>or</span>
+            </div>
+            
+            <p class="signup-link">
+                Don't have an account? <a href="signup.html">Sign up</a>
+            </p>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Driver • RankGo Taxi</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="driver">
+    <div class="container">
+        <nav class="navbar">
+            <div class="nav-left">
+                <img src="assets/logo.svg" alt="logo">
+                <div class="brand">RankGo<b>Taxi</b></div>
+            </div>
+            <div class="nav-right">
+                <span class="notification-badge" id="notifBadge" style="display:none">0</span>
+                <button class="icon-btn" id="notifBtn" title="Notifications">🔔</button>
+                <button class="icon-btn" id="msgBtn" title="Messages">💬</button>
+                <span id="userBadge" class="badge"></span>
+                <a href="#" id="logoutBtn">Logout</a>
+            </div>
+        </nav>
+        
+        <!-- Pending Requests Alert -->
+        <div class="alert-banner" id="pendingAlert" style="display:none">
+            <span>⚠️ You have <strong id="pendingCount">0</strong> pending ride requests</span>
+            <button class="btn small" onclick="document.getElementById('pendingRequests').scrollIntoView({behavior:'smooth'})">View Requests</button>
+        </div>
+        
+        <div class="card" id="pendingRequestsCard">
+            <h2>🔔 Pending Ride Requests</h2>
+            <div id="pendingRequests"></div>
+        </div>
+        
+        <div class="card">
+            <h2>🚗 Active Rides</h2>
+            <div id="activeRides"></div>
+        </div>
+        
+        <div class="card">
+            <h1>My Taxis & Routes</h1>
+            
+            <div class="grid">
+                <div class="col-6">
+                    <h2>Add a Vehicle</h2>
+                    <form id="addVehicleForm">
+                        <input type="text" class="input" id="vName" placeholder="Vehicle name (e.g. Quantum)" required>
+                        
+                        <div class="grid" style="margin-top: 8px;">
+                            <div class="col-6">
+                                <input type="text" class="input" id="vOrigin" placeholder="Origin" required>
+                            </div>
+                            <div class="col-6">
+                                <input type="text" class="input" id="vDest" placeholder="Destination" required>
+                            </div>
+                        </div>
+                        
+                        <div class="grid" style="margin-top: 8px;">
+                            <div class="col-6">
+                                <input type="number" class="input" id="vSeats" min="1" value="15" placeholder="Seats" required>
+                            </div>
+                            <div class="col-6">
+                                <input type="number" class="input" id="vPrice" min="0" value="30" placeholder="Price per seat" required>
+                            </div>
+                        </div>
+                        
+                        <input type="text" class="input" id="vTimes" style="margin-top: 8px;" placeholder="Departure times (e.g. 06:00, 07:30, 09:00)" required>
+                        
+                        <button type="submit" class="btn" style="margin-top: 10px;">Add Vehicle</button>
+                    </form>
+                    <p class="hint" id="vHint"></p>
+                </div>
+                
+                <div class="col-6">
+                    <h2>My Vehicles</h2>
+                    <div id="myVehicles"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>📋 Confirmed Bookings</h2>
+            <div id="driverBookings"></div>
+        </div>
+        
+        <div class="card">
+            <h2>💰 Earnings Summary</h2>
+            <div class="earnings-grid">
+                <div class="earnings-card">
+                    <div class="earnings-label">Today</div>
+                    <div class="earnings-value" id="earningsToday">R0</div>
+                </div>
+                <div class="earnings-card">
+                    <div class="earnings-label">This Week</div>
+                    <div class="earnings-value" id="earningsWeek">R0</div>
+                </div>
+                <div class="earnings-card">
+                    <div class="earnings-label">Total</div>
+                    <div class="earnings-value" id="earningsTotal">R0</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Messages Modal -->
+    <div class="modal" id="messagesModal">
+        <div class="modal-content modal-large">
+            <span class="close-modal" id="closeMsgModal">&times;</span>
+            <h2>Messages</h2>
+            <div class="chat-list" id="chatList"></div>
+        </div>
+    </div>
+    
+    <!-- Chat Modal -->
+    <div class="modal" id="chatModal">
+        <div class="modal-content modal-large">
+            <div class="chat-header">
+                <button class="back-btn" id="backToChats">←</button>
+                <h3 id="chatWith"></h3>
+                <span class="close-modal" id="closeChatModal">&times;</span>
+            </div>
+            <div class="chat-messages" id="chatMessages"></div>
+            <div class="chat-input">
+                <input type="text" class="input" id="messageInput" placeholder="Type a message...">
+                <button class="btn" id="sendMessage">Send</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Notifications Panel -->
+    <div class="notifications-panel" id="notifPanel" style="display:none">
+        <div class="notif-header">
+            <h3>Notifications</h3>
+            <button class="clear-btn" id="clearNotifs">Clear All</button>
+        </div>
+        <div class="notif-list" id="notifList"></div>
+    </div>
+    
+    <!-- Update Status Modal -->
+    <div class="modal" id="statusModal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeStatusModal">&times;</span>
+            <h2>Update Ride Status</h2>
+            <div id="statusBookingInfo"></div>
+            <div class="status-options">
+                <button class="btn status-btn" data-status="on_way" onclick="DriverController.updateRideStatus('on_way')">
+                    🚕 I'm On The Way
+                </button>
+                <button class="btn status-btn" data-status="arriving" onclick="DriverController.updateRideStatus('arriving')">
+                    ⏰ Arriving in 2 Minutes
+                </button>
+                <button class="btn status-btn" data-status="arrived" onclick="DriverController.updateRideStatus('arrived')">
+                    📍 I Have Arrived
+                </button>
+                <button class="btn status-btn" data-status="in_progress" onclick="DriverController.updateRideStatus('in_progress')">
+                    🚗 Trip In Progress
+                </button>
+                <button class="btn status-btn success" data-status="completed" onclick="DriverController.updateRideStatus('completed')">
+                    ✅ Trip Completed
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="app.js"></script>
+</body>
+</html>
