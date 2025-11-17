@@ -1,4 +1,3 @@
-// RankGo Taxi - Enhanced Application with Real-time Features
 
 // =============================================
 // Data Store (LocalStorage)
